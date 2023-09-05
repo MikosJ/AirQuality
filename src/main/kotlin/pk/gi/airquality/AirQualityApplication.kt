@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class AirQualityApplication
 
 fun main(args: Array<String>) {
-	runApplication<AirQualityApplication>(*args)
+	runApplication<AirQualityApplication>()
 }
