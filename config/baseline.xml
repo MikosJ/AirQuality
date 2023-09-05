@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>EmptyFunctionBlock:AirQualityApplicationTests.kt$AirQualityApplicationTests${ }</ID>
+  </CurrentIssues>
+</SmellBaseline>
