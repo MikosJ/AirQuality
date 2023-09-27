@@ -1,12 +1,12 @@
 package pk.gi.airquality.db.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 @Entity
 data class Param(
-    @Id val id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long,
     val name: String,
     val formula: String,
     val code: String,

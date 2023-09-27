@@ -3,6 +3,7 @@ package pk.gi.airquality.controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
+import pk.gi.airquality.db.model.Sensor
 import pk.gi.airquality.model.rest.SensorData
 import pk.gi.airquality.model.rest.Sensors
 import pk.gi.airquality.model.rest.Stations
@@ -17,8 +18,18 @@ class AirQualityController(
         return giosDataImportService.getAllStations()
     }
 
+    @GetMapping("/stations/save")
+    fun saveAllStations() {
+        return giosDataImportService.saveAllStations()
+    }
+
+    @GetMapping("/stations/sensors/save")
+    fun saveSensors() {
+        return giosDataImportService.saveSensorData()
+    }
+
     @GetMapping("/stations/{stationId}")
-    fun getSensorsForStation(@PathVariable stationId: Long): Sensors {
+    fun getSensorsForStation(@PathVariable stationId: Long): List<pk.gi.airquality.model.rest.Sensor> {
         return giosDataImportService.getSensorsForSingleStation(stationId)
     }
 

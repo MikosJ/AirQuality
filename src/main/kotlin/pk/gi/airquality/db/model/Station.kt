@@ -5,7 +5,8 @@ import jakarta.persistence.Id
 
 @Entity
 data class Station(
-    @Id val id: Long,
+    @Id
+    val id: Long,
     val name: String,
     val latitude: Double,
     val longitude: Double
