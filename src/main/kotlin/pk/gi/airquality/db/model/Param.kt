@@ -9,7 +9,5 @@ data class Param(
     val id: Long,
     val name: String,
     val formula: String,
-    val code: String,
-    @OneToMany
-    val values: List<SensorValues>
+    val code: String
 )

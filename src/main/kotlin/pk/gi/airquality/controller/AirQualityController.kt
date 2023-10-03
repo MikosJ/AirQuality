@@ -23,7 +23,7 @@ class AirQualityController(
 
     @GetMapping("/stations/sensors/save")
     fun saveSensors() {
-        return giosDataImportService.saveSensorData()
+        return giosDataImportService.saveSensors()
     }
 
     @GetMapping("/stations/{stationId}")

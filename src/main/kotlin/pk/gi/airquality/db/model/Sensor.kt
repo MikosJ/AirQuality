@@ -7,7 +7,7 @@ data class Sensor(
     @Id
     val id: Long,
     @OneToOne
-    val stationId: Station,
+    val parameter: Param,
     @OneToOne
-    val parameter: Param
+    val station: Station
 )
