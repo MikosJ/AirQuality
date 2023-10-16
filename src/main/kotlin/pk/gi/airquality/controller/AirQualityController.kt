@@ -9,7 +9,7 @@ import pk.gi.airquality.service.GiosDataImportService
 
 @RestController()
 class AirQualityController(
-        val giosDataImportService: GiosDataImportService
+    val giosDataImportService: GiosDataImportService
 ) {
     @GetMapping("/stations")
     fun getAllStations(): Stations {
@@ -31,7 +31,7 @@ class AirQualityController(
         return giosDataImportService.getSensorsForSingleStation(stationId)
     }
 
-    @GetMapping("/stations/{stationId}/{sensorId}")
+    @GetMapping("/stations/{stationId}/sensors/{sensorId}")
     fun getDataForSensor(@PathVariable sensorId: Long): SensorData {
         return giosDataImportService.getDataForSensor(sensorId)
     }

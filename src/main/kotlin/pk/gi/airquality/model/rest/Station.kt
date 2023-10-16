@@ -10,5 +10,9 @@ data class Station(
     @JsonProperty("gegrLat")
     val latitude: Double,
     @JsonProperty("gegrLon")
-    val longitude: Double
+    val longitude: Double,
+    @JsonProperty("city")
+    val city: City,
+    @JsonProperty("addressStreet")
+    val addressStreet: String?
 )

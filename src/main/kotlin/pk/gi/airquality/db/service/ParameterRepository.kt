@@ -2,7 +2,7 @@ package pk.gi.airquality.db.service
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
-import pk.gi.airquality.db.model.Param
+import pk.gi.airquality.db.model.Parameter
 
 @Service
-interface ParamRepository : CrudRepository<Param, Long>
+interface ParameterRepository : CrudRepository<Parameter, Long>

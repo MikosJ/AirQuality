@@ -6,8 +6,8 @@ import jakarta.persistence.*
 data class Sensor(
     @Id
     val id: Long,
-    @OneToOne
-    val parameter: Param,
-    @OneToOne
-    val station: Station
+    @ManyToMany
+    @JoinColumn(name="parameter_id")
+    val parameter: List<Parameter>
+
 )
