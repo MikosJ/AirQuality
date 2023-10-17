@@ -5,7 +5,6 @@ import jakarta.persistence.*
 @Entity
 data class Station(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val stationId: Long? = null,
     val stationName: String,
     val gegrLat: Double,

@@ -1,6 +1,7 @@
 package pk.gi.airquality.db.model
 
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 data class SensorData(
@@ -12,6 +13,9 @@ data class SensorData(
     @JoinColumn(name = "sensor_id")
     val sensor: Sensor,
 
-    val date: String,
-    val value: Double
+    val date: LocalDateTime?,
+    val value: Double?,
+    @ManyToOne
+    @JoinColumn(name = "param_id")
+    val parameter: Parameter
 )

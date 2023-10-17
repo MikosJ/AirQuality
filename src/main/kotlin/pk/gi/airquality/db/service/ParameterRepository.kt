@@ -5,4 +5,6 @@ import org.springframework.stereotype.Service
 import pk.gi.airquality.db.model.Parameter
 
 @Service
-interface ParameterRepository : CrudRepository<Parameter, Long>
+interface ParameterRepository : CrudRepository<Parameter, Long> {
+    fun findFirstByParamCode(paramCode: String): Parameter
+}

@@ -1,5 +1,6 @@
 package pk.gi.airquality.service
 
+import jakarta.transaction.Transactional
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -8,14 +9,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import pk.gi.airquality.db.model.City
 import pk.gi.airquality.db.model.Parameter
-import pk.gi.airquality.db.service.CityRepository
-import pk.gi.airquality.db.service.ParameterRepository
-import pk.gi.airquality.db.service.SensorRepository
-import pk.gi.airquality.db.service.StationRepository
-import pk.gi.airquality.model.rest.Sensor
-import pk.gi.airquality.model.rest.SensorData
-import pk.gi.airquality.model.rest.Stations
-import pk.gi.airquality.model.rest.Station
+import pk.gi.airquality.db.service.*
+import pk.gi.airquality.model.rest.*
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
 
@@ -25,7 +20,8 @@ class GiosDataImportService(
     val sensorRepository: SensorRepository,
     val stationRepository: StationRepository,
     val parameterRepository: ParameterRepository,
-    val cityRepository: CityRepository
+    val cityRepository: CityRepository,
+    val sensorDataRepository: SensorDataRepository
 ) {
     fun getAllStations(): Stations {
         return Stations(
@@ -83,15 +79,45 @@ class GiosDataImportService(
         }
     }
 
-//    fun saveSensorData() {
-//        sensorRepository.findAll().forEach { sensor ->
-//            val body = restTemplate.exchange(
-//                URI("https://api.gios.gov.pl/pjp-api/rest/data/getData/${sensor.id}"),
-//                HttpMethod.GET,
-//                HttpEntity.EMPTY
-//            )
-//        }
-//    }
+    fun saveSensorData() {
+        sensorRepository.findAll().forEach { sensor ->
+            val body = restTemplate.exchange(
+                URI("https://api.gios.gov.pl/pjp-api/rest/data/getData/${sensor.id}"),
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                SensorData::class.java
+            ).body!!
+            if (body.values.isNotEmpty() && body.values[0].value != null) {
+                if (!(sensorDataRepository.existsByDateAndSensorId(body.values[0].date!!, sensor.id))) {
+                    body.values[0].let {
+                        val param = parameterRepository.findFirstByParamCode(body.key)
+                        sensorDataRepository.save(
+                            pk.gi.airquality.db.model.SensorData(
+                                sensor = sensor,
+                                date = it.date,
+                                value = it.value,
+                                parameter = param
+                            )
+                        )
+                    }
+                }
+            }
+
+
+//            body.values.forEach { value ->
+//                val param = parameterRepository.findFirstByParamCode(body.key)
+//                sensorDataRepository.save(
+//                    pk.gi.airquality.db.model.SensorData(
+//                        sensor = sensor,
+//                        date = value.date,
+//                        value = value.value,
+//                        parameter = param
+//                    )
+//                )
+//            }
+        }
+    }
+
 
     fun getSensorsForSingleStation(stationId: Long): List<Sensor> {
         val body =
@@ -111,6 +137,11 @@ class GiosDataImportService(
             HttpEntity.EMPTY,
             SensorData::class.java
         ).body!!
+    }
+
+    @Transactional
+    fun deleteAllNullValues() {
+        sensorDataRepository.deleteAllByValueNull()
     }
 
 }

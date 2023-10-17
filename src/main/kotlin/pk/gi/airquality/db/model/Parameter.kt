@@ -9,6 +9,5 @@ data class Parameter(
     val paramCode: String,
     val idParam: Long,
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val paramId: Long? = null
 )

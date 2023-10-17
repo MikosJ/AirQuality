@@ -1,5 +1,6 @@
 package pk.gi.airquality.controller
 
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
@@ -25,6 +26,10 @@ class AirQualityController(
     fun saveSensors() {
         return giosDataImportService.saveSensors()
     }
+    @GetMapping("/stations/sensors/data/save")
+    fun saveSensorData() {
+        return giosDataImportService.saveSensorData()
+    }
 
     @GetMapping("/stations/{stationId}")
     fun getSensorsForStation(@PathVariable stationId: Long): List<pk.gi.airquality.model.rest.Sensor> {
@@ -34,5 +39,10 @@ class AirQualityController(
     @GetMapping("/stations/{stationId}/sensors/{sensorId}")
     fun getDataForSensor(@PathVariable sensorId: Long): SensorData {
         return giosDataImportService.getDataForSensor(sensorId)
+    }
+
+    @DeleteMapping("/stations/sensors/data/delete")
+    fun deleteNullSensorData() {
+        return giosDataImportService.deleteAllNullValues()
     }
 }

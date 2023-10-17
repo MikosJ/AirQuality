@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 
 data class Station(
+    @JsonProperty("id")
     val id: Long,
     @JsonProperty("stationName")
     val name: String,
