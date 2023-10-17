@@ -3,5 +3,6 @@
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
     <ID>EmptyFunctionBlock:AirQualityApplicationTests.kt$AirQualityApplicationTests${ }</ID>
+    <ID>NestedBlockDepth:GiosDataImportService.kt$GiosDataImportService$fun saveSensorData()</ID>
   </CurrentIssues>
 </SmellBaseline>

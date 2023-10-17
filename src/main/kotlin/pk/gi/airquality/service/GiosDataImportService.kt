@@ -9,8 +9,15 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import pk.gi.airquality.db.model.City
 import pk.gi.airquality.db.model.Parameter
-import pk.gi.airquality.db.service.*
-import pk.gi.airquality.model.rest.*
+import pk.gi.airquality.db.service.CityRepository
+import pk.gi.airquality.db.service.SensorDataRepository
+import pk.gi.airquality.db.service.SensorRepository
+import pk.gi.airquality.db.service.StationRepository
+import pk.gi.airquality.db.service.ParameterRepository
+import pk.gi.airquality.model.rest.Station
+import pk.gi.airquality.model.rest.SensorData
+import pk.gi.airquality.model.rest.Sensor
+import pk.gi.airquality.model.rest.Stations
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
 
