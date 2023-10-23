@@ -1,7 +1,10 @@
 package pk.gi.airquality.db.model
 
-import jakarta.persistence.*
-import org.hibernate.annotations.Cascade
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.FetchType
+
 
 @Entity
 data class Sensor(
