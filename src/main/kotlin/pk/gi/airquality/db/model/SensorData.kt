@@ -1,26 +1,20 @@
 package pk.gi.airquality.db.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
+import jakarta.persistence.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
 data class SensorData(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val dataId: Long? = null,
+    val id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "sensor_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     val sensor: Sensor,
-
     val date: LocalDateTime?,
-    val value: Double?,
+    @Column(scale = 2)
+    val value: BigDecimal,
     @ManyToOne
-    @JoinColumn(name = "param_id")
     val parameter: Parameter
 )

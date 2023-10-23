@@ -18,6 +18,7 @@ import pk.gi.airquality.model.rest.Station
 import pk.gi.airquality.model.rest.SensorData
 import pk.gi.airquality.model.rest.Sensor
 import pk.gi.airquality.model.rest.Stations
+import java.math.BigDecimal
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
 
@@ -67,6 +68,7 @@ class GiosDataImportService(
         )
     }
 
+
     fun saveSensors() {
         stationRepository.findAll().forEach { station ->
             val body = restTemplate.exchange(
@@ -75,12 +77,34 @@ class GiosDataImportService(
                 RequestEntity.EMPTY,
                 typeReference<List<Sensor>>()
             ).body!!
-            val params = body.map { sensor ->
-                Parameter(sensor.param.name, sensor.param.formula, sensor.param.code, sensor.param.id)
+
+            body.forEach { sensor ->
+                if (!parameterRepository.existsByIdParam(sensor.param.id)) {
+                    parameterRepository.save(Parameter(
+                        paramName = sensor.param.name,
+                        paramFormula = sensor.param.formula,
+                        paramCode = sensor.param.code,
+                        idParam = sensor.param.id
+                    ))
+                }
             }
-            parameterRepository.saveAll(params)
+
+
+
+//            params.forEach {
+//                if (!parameterRepository.existsByIdParam(it.idParam)) {
+//                    parameterRepository.save(
+//                        Parameter(
+//                            paramName = it.paramName,
+//                            paramFormula = it.paramFormula,
+//                            paramCode = it.paramCode,
+//                            idParam = it.idParam
+//                        )
+//                    )
+//                }
+//            }
             val sensors = body.map { sensor ->
-                pk.gi.airquality.db.model.Sensor(sensor.id, params)
+                pk.gi.airquality.db.model.Sensor(sensor.id, station)
             }
             sensorRepository.saveAll(sensors)
         }
@@ -102,26 +126,13 @@ class GiosDataImportService(
                             pk.gi.airquality.db.model.SensorData(
                                 sensor = sensor,
                                 date = it.date,
-                                value = it.value,
+                                value = BigDecimal.valueOf(it.value!!),
                                 parameter = param
                             )
                         )
                     }
                 }
             }
-
-
-//            body.values.forEach { value ->
-//                val param = parameterRepository.findFirstByParamCode(body.key)
-//                sensorDataRepository.save(
-//                    pk.gi.airquality.db.model.SensorData(
-//                        sensor = sensor,
-//                        date = value.date,
-//                        value = value.value,
-//                        parameter = param
-//                    )
-//                )
-//            }
         }
     }
 

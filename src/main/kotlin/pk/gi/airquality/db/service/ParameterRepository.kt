@@ -7,4 +7,8 @@ import pk.gi.airquality.db.model.Parameter
 @Service
 interface ParameterRepository : CrudRepository<Parameter, Long> {
     fun findFirstByParamCode(paramCode: String): Parameter
+
+    fun existsByIdParam(idParam: Long): Boolean
+
+
 }
