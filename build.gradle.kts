@@ -28,16 +28,16 @@ detekt {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.4")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+	runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.1.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation("com.h2database:h2:1.4.200")
 	implementation("org.jetbrains.kotlin.plugin.jpa:org.jetbrains.kotlin.plugin.jpa.gradle.plugin:1.9.10")
-
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
+	implementation("org.springframework.boot:spring-boot-starter-webflux:3.1.5")
 
 }
 
