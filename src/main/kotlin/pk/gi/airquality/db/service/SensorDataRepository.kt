@@ -7,7 +7,10 @@ import java.time.LocalDateTime
 
 @Service
 interface SensorDataRepository : CrudRepository<SensorData, Long> {
-    fun deleteAllByValueNull()
 
     fun existsByDateAndSensorId(date: LocalDateTime, sensorId: Long): Boolean
+
+    fun findAllBySensorStationStationIdAndDateAfter(stationID: Long, date: LocalDateTime): List<SensorData>
+
+
 }
