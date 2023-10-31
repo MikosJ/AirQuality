@@ -38,7 +38,11 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.1.5")
-
+	implementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+	implementation("io.mockk:mockk:1.12.0")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
 }
 
 tasks.withType<KotlinCompile> {

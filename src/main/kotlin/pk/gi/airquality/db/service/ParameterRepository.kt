@@ -10,5 +10,4 @@ interface ParameterRepository : CrudRepository<Parameter, Long> {
 
     fun existsByIdParam(idParam: Long): Boolean
 
-
 }

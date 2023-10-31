@@ -21,6 +21,6 @@ data class SensorData(
     val date: LocalDateTime?,
     @Column(scale = 2)
     val value: BigDecimal,
-    @ManyToOne
-    val parameter: Parameter
+    val parameterName: String,
+    val parameterFormula: String
 )

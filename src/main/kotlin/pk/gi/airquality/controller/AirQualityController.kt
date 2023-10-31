@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.DeleteMapping
 import pk.gi.airquality.model.rest.SensorData
 import pk.gi.airquality.model.rest.Stations
 import pk.gi.airquality.service.GIOSDataImportService
@@ -54,8 +53,4 @@ class AirQualityController(
         return giosDataImportService.getDataForSensor(sensorId)
     }
 
-    @DeleteMapping("/stations/sensors/data/delete")
-    fun deleteNullSensorData() {
-        return giosDataImportService.deleteAllNullValues()
-    }
 }
