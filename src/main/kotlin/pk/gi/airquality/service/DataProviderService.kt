@@ -1,5 +1,6 @@
 package pk.gi.airquality.service
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -10,6 +11,7 @@ import pk.gi.airquality.db.service.StationRepository
 import pk.gi.airquality.model.rest.out.SensorDataValues
 import pk.gi.airquality.model.rest.out.SensorValues
 import pk.gi.airquality.model.rest.out.StationData
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Service
@@ -58,6 +60,26 @@ class DataProviderService(
         val lastFourHours = LocalDateTime.now().minusHours(ONE)
         return fetchSensorDataForStationsSince(lastFourHours)
     }
+
+    fun test(): List<ResultProjection> {
+        return sensorDataRepository.findAllDataWithStationNameAndParamName()
+    }
+    interface ResultProjection {
+        val station_name: String
+
+        val station_city: String
+
+        val parameter_formula: String
+
+        val parameter_name: String
+
+        val value: BigDecimal
+
+        @get:JsonFormat(pattern = "dd.MM.YYYY-HH:mm")
+        val date: LocalDateTime
+    }
+
+
 
     companion object {
         const val THREE = 3L

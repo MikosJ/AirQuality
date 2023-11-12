@@ -18,4 +18,8 @@ class ExternalDataController(
     suspend fun getLastHourData(): List<StationData> {
         return dataProviderService.getLastAddedSensorData()
     }
+    @GetMapping("/ext/lastH")
+    suspend fun getLastHourData2(): List<DataProviderService.ResultProjection> {
+        return dataProviderService.test()
+    }
 }
