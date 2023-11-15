@@ -43,6 +43,9 @@ dependencies {
 	implementation("io.mockk:mockk:1.12.0")
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+	implementation("org.apache.logging.log4j:log4j-api:2.21.1")
+	implementation("org.apache.logging.log4j:log4j-core:2.21.1")
+
 }
 
 tasks.withType<KotlinCompile> {
