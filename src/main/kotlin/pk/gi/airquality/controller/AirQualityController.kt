@@ -1,7 +1,5 @@
 package pk.gi.airquality.controller
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,23 +17,22 @@ class AirQualityController(
 
     @PostMapping("/stations")
     suspend fun saveAllStations() {
-        withContext(Dispatchers.IO) {
             giosDataImportService.saveAllStations()
-        }
     }
 
     @PostMapping("/stations/sensors")
     suspend fun saveSensors() {
-        withContext(Dispatchers.IO) {
             giosDataImportService.saveSensors()
-        }
     }
 
     @PostMapping("/stations/sensors/data")
     suspend fun saveSensorData() {
-        withContext(Dispatchers.IO) {
             giosDataImportService.saveSensorData()
-        }
+    }
+
+    @PostMapping("/stations/index/data")
+    suspend fun saveAirQualityIndexData() {
+            giosDataImportService.saveAirQualityIndex()
     }
 
     @GetMapping("/stations/{stationId}")

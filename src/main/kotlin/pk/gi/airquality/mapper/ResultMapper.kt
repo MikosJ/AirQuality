@@ -6,9 +6,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Component
+import pk.gi.airquality.model.rest.AirQualityIndex
+import pk.gi.airquality.model.rest.IndexLevel
 import pk.gi.airquality.model.rest.out.*
 import java.math.BigDecimal
+import java.nio.charset.Charset
 import java.sql.Timestamp
+import java.time.LocalDateTime
 
 @Component
 class ResultMapper {
@@ -93,7 +97,8 @@ class ResultMapper {
             val cities = groupedByCity.map { (city, station) ->
                 val groupedByStation = station.groupBy { it.stationName }
                 val stations = groupedByStation.map { (station, stationSensorData) ->
-                    val parameters = mapSensorDataToParameters(stationSensorData, isParameterSpecified, parameterFormula)
+                    val parameters =
+                        mapSensorDataToParameters(stationSensorData, isParameterSpecified, parameterFormula)
                     val firstStation = stationSensorData[0]
                     Station(
                         firstStation.stationName,
@@ -108,5 +113,18 @@ class ResultMapper {
         }
     }
 
-
+    suspend fun mapDbIndexToRest(list: List<Tuple>): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
+        return withContext(Dispatchers.IO) {
+            val resultList = list.map { tuple ->
+                async {
+                   AirQualityIndex(
+                        tuple.get(0, Number::class.java),
+                        tuple.get(3, Timestamp::class.java).toLocalDateTime(),
+                        IndexLevel(tuple.get(1,Number::class.java), tuple.get(2,String::class.java))
+                    )
+                }
+            }
+            resultList.awaitAll()
+        }
+    }
 }

@@ -3,15 +3,18 @@ package pk.gi.airquality.controller
 import org.apache.logging.log4j.LogManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import pk.gi.airquality.Exception.IllegalFormulaException
+import pk.gi.airquality.db.model.AirQualityIndex
 import pk.gi.airquality.model.rest.out.CityStations
 import pk.gi.airquality.model.rest.out.VoivodeshipCity
 import pk.gi.airquality.service.DataProviderService
 
 @RestController
+@CrossOrigin(origins = ["http://localhost:5173"])
 class ExternalDataController(
     val dataProviderService: DataProviderService
 ) {
@@ -41,6 +44,12 @@ class ExternalDataController(
                 }
             }
         return ResponseEntity(emptyList(), HttpStatus.NOT_FOUND)
+    }
+
+    @GetMapping("/stations/index/{interval}")
+    suspend fun getAirQualityIndex(@PathVariable interval: Number): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
+
+        return dataProviderService.getAllIndexAfterDate(interval)
     }
 
     companion object {

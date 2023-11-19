@@ -4,14 +4,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import pk.gi.airquality.Exception.IllegalFormulaException
+import pk.gi.airquality.db.service.AirQualityIndexRepository
 import pk.gi.airquality.db.service.SensorDataRepository
 import pk.gi.airquality.mapper.ResultMapper
+import pk.gi.airquality.model.rest.AirQualityIndex
 import pk.gi.airquality.model.rest.out.CityStations
 import pk.gi.airquality.model.rest.out.VoivodeshipCity
 
 @Service
 class DataProviderService(
     val sensorDataRepository: SensorDataRepository,
+    val airQualityIndexRepository: AirQualityIndexRepository,
     val resultMapper: ResultMapper
 ) {
     suspend fun getDataForParameterFormula(parameterFormula: String, interval: Number): List<CityStations> {
@@ -54,6 +57,13 @@ class DataProviderService(
             throw IllegalFormulaException("Parameter formula $parameterFormula is not supported")
         }
     }
+
+    suspend fun getAllIndexAfterDate(interval: Number): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
+        return resultMapper.mapDbIndexToRest(withContext(Dispatchers.IO) {
+            airQualityIndexRepository.findAllByStCalcDateAfter(interval)
+        })
+    }
+
 
     companion object {
         val FORMULAS = listOf("NO2", "O3", "PM10", "PM2.5", "C6H6", "CO", "SO2")
