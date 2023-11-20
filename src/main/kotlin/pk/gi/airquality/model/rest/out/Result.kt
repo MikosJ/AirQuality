@@ -14,5 +14,6 @@ data class Result(
     val city: String,
     val voivodeship: String,
     val longitude: Number,
-    val latitude: Number
+    val latitude: Number,
+    val stationId: Number
 )

@@ -23,7 +23,8 @@ interface SensorDataRepository : CrudRepository<SensorData, Long> {
                 "    c.commune_name AS city,\n" +
                 "    c.province_name AS voivodeship,\n" +
                 "    st.gegr_lon AS longitude,\n" +
-                "    st.gegr_lat AS latitude\n" +
+                "    st.gegr_lat AS latitude,\n" +
+                "    st.station_id AS stationId\n" +
                 "FROM\n" +
                 "    sensor_data sd\n" +
                 "        JOIN\n" +

@@ -29,7 +29,8 @@ class ResultMapper {
                         tuple.get(5, String::class.java),
                         tuple.get(6, String::class.java),
                         tuple.get(7, Number::class.java),
-                        tuple.get(8, Number::class.java)
+                        tuple.get(8, Number::class.java),
+                        tuple.get(9,Number::class.java)
                     )
                 }
             }
@@ -77,6 +78,7 @@ class ResultMapper {
                 val firstStation = stationSensorData[0]
                 Station(
                     firstStation.stationName,
+                    firstStation.stationId,
                     firstStation.longitude,
                     firstStation.latitude,
                     parameters
@@ -102,6 +104,7 @@ class ResultMapper {
                     val firstStation = stationSensorData[0]
                     Station(
                         firstStation.stationName,
+                        firstStation.stationId,
                         firstStation.longitude,
                         firstStation.latitude,
                         parameters
