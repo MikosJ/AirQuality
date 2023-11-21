@@ -6,21 +6,23 @@ import org.springframework.stereotype.Service
 import pk.gi.airquality.Exception.IllegalFormulaException
 import pk.gi.airquality.db.service.AirQualityIndexRepository
 import pk.gi.airquality.db.service.SensorDataRepository
+import pk.gi.airquality.db.service.StationRepository
 import pk.gi.airquality.mapper.ResultMapper
-import pk.gi.airquality.model.rest.AirQualityIndex
 import pk.gi.airquality.model.rest.out.CityStations
+import pk.gi.airquality.model.rest.out.StationDTO
 import pk.gi.airquality.model.rest.out.VoivodeshipCity
 
 @Service
 class DataProviderService(
     val sensorDataRepository: SensorDataRepository,
     val airQualityIndexRepository: AirQualityIndexRepository,
+    val stationRepository: StationRepository,
     val resultMapper: ResultMapper
 ) {
     suspend fun getDataForParameterFormula(parameterFormula: String, interval: Number): List<CityStations> {
         if (parameterFormula in FORMULAS || parameterFormula == "all")
             return resultMapper.mapResultListToResponseDataByCity(
-                resultMapper.mapEachTupleToResult(withContext(Dispatchers.IO) {
+                resultMapper.mapEachTupleToDataResult(withContext(Dispatchers.IO) {
                     sensorDataRepository.findAllDataWithStationNameAndParamName(interval)
                 }),
                 parameterFormula != "all",
@@ -33,7 +35,7 @@ class DataProviderService(
     suspend fun getDataForParameterFormulaByVoivodeship(parameterFormula: String, interval: Number): List<VoivodeshipCity> {
         if (parameterFormula in FORMULAS || parameterFormula == "all")
             return resultMapper.mapResultListToResponseDataByVoivodeship(
-                resultMapper.mapEachTupleToResult(withContext(Dispatchers.IO) {
+                resultMapper.mapEachTupleToDataResult(withContext(Dispatchers.IO) {
                     sensorDataRepository.findAllDataWithStationNameAndParamName(interval)
                 }),
                 parameterFormula != "all",
@@ -47,7 +49,7 @@ class DataProviderService(
     suspend fun getAverageValuesForParameterFormulaByVoivodeship(parameterFormula: String, interval: Number): List<VoivodeshipCity> {
         if (parameterFormula in FORMULAS || parameterFormula == "all")
             return resultMapper.mapResultListToResponseDataByVoivodeship(
-                resultMapper.mapEachTupleToResult(withContext(Dispatchers.IO) {
+                resultMapper.mapEachTupleToDataResult(withContext(Dispatchers.IO) {
                     sensorDataRepository.findAverageValueForParameter(interval)
                 }),
                 parameterFormula != "all",
@@ -61,6 +63,12 @@ class DataProviderService(
     suspend fun getAllIndexAfterDate(interval: Number): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
         return resultMapper.mapDbIndexToRest(withContext(Dispatchers.IO) {
             airQualityIndexRepository.findAllByStCalcDateAfter(interval)
+        })
+    }
+
+    suspend fun getAllStations(): List<StationDTO> {
+        return resultMapper.mapEachTupleToStation(withContext(Dispatchers.IO) {
+            stationRepository.findAllStations()
         })
     }
 

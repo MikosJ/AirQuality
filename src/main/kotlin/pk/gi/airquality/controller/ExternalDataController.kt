@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import pk.gi.airquality.Exception.IllegalFormulaException
 import pk.gi.airquality.db.model.AirQualityIndex
+import pk.gi.airquality.db.model.Station
 import pk.gi.airquality.model.rest.out.CityStations
+import pk.gi.airquality.model.rest.out.StationDTO
 import pk.gi.airquality.model.rest.out.VoivodeshipCity
 import pk.gi.airquality.service.DataProviderService
 
@@ -52,6 +54,10 @@ class ExternalDataController(
         return dataProviderService.getAllIndexAfterDate(interval)
     }
 
+    @GetMapping("/stations/all")
+    suspend fun getAirQualityIndex():  List<StationDTO>{
+        return dataProviderService.getAllStations()
+    }
     companion object {
         private val logger = LogManager.getLogger()
     }

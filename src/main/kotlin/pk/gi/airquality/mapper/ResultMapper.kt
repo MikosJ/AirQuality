@@ -6,17 +6,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Component
-import pk.gi.airquality.model.rest.AirQualityIndex
-import pk.gi.airquality.model.rest.IndexLevel
 import pk.gi.airquality.model.rest.out.*
 import java.math.BigDecimal
-import java.nio.charset.Charset
 import java.sql.Timestamp
-import java.time.LocalDateTime
 
 @Component
 class ResultMapper {
-    suspend fun mapEachTupleToResult(list: List<Tuple>): List<Result> {
+    suspend fun mapEachTupleToDataResult(list: List<Tuple>): List<Result> {
         return withContext(Dispatchers.IO) {
             val resultList = list.map { tuple ->
                 async {
@@ -30,13 +26,29 @@ class ResultMapper {
                         tuple.get(6, String::class.java),
                         tuple.get(7, Number::class.java),
                         tuple.get(8, Number::class.java),
-                        tuple.get(9,Number::class.java)
+                        tuple.get(9, Number::class.java)
                     )
                 }
             }
             resultList.awaitAll()
         }
     }
+
+    suspend fun mapEachTupleToStation(list: List<Tuple>): List<StationDTO> {
+        return withContext(Dispatchers.IO) {
+            val resultList = list.map{tuple ->
+                async {
+                    StationDTO(
+                        tuple.get(0, String::class.java),
+                        tuple.get(1, Number::class.java),
+                        tuple.get(2, String::class.java)
+                    )
+                }
+            }
+            resultList.awaitAll()
+        }
+    }
+
 
     fun mapSensorDataToParameters(
         stationSensorData: List<Result>,
@@ -120,10 +132,10 @@ class ResultMapper {
         return withContext(Dispatchers.IO) {
             val resultList = list.map { tuple ->
                 async {
-                   AirQualityIndex(
+                    AirQualityIndex(
                         tuple.get(0, Number::class.java),
                         tuple.get(3, Timestamp::class.java).toLocalDateTime(),
-                        IndexLevel(tuple.get(1,Number::class.java), tuple.get(2,String::class.java))
+                        IndexLevel(tuple.get(1, Number::class.java), tuple.get(2, String::class.java))
                     )
                 }
             }
