@@ -142,4 +142,20 @@ class ResultMapper {
             resultList.awaitAll()
         }
     }
+
+    suspend fun mapEachTupleToAverageValues(list: List<Tuple>): List<AverageValues> {
+        return withContext(Dispatchers.IO) {
+            val resultList = list.map { tuple ->
+                async {
+                    AverageValues(
+                        tuple.get(0, Number::class.java),
+                        tuple.get(1, String::class.java),
+                        tuple.get(2, String::class.java),
+                        tuple.get(3, String::class.java)
+                    )
+                }
+            }
+            resultList.awaitAll()
+        }
+    }
 }

@@ -40,13 +40,10 @@ interface SensorDataRepository : CrudRepository<SensorData, Long> {
 
     @Query(
         value = "SELECT\n" +
-                "AVG(sd.value) AS averageValue,\n" +
-                "sd.parameter_formula AS parameterFormula,\n" +
-                "sd.parameter_name AS parameterName,\n" +
-                "st.station_name AS stationName,\n" +
-                "c.province_name AS voivodeship,\n" +
-                "st.gegr_lat AS latitude,\n" +
-                "st.gegr_lon AS longitude\n" +
+                "    AVG(sd.value) AS averageValue,\n" +
+                "    sd.parameter_formula AS parameterFormula,\n" +
+                "    sd.parameter_name AS parameterName,\n" +
+                "    c.province_name AS voivodeship\n" +
                 "FROM\n" +
                 "    sensor_data sd\n" +
                 "        JOIN\n" +
@@ -57,8 +54,8 @@ interface SensorDataRepository : CrudRepository<SensorData, Long> {
                 "    city c ON st.city_id = c.id\n" +
                 "WHERE\n" +
                 "        sd.date >= NOW() - INTERVAL :interval HOUR\n" +
-                "group by c.commune_name, sd.parameter_formula,station_name\n" +
-                "    order by TRIM(station_name)", nativeQuery = true
+                "GROUP BY\n" +
+                "    c.province_name , sd.parameter_formula;\n", nativeQuery = true
     )
     fun findAverageValueForParameter(interval: Number): List<Tuple>
 

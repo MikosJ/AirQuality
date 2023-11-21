@@ -8,6 +8,7 @@ import pk.gi.airquality.db.service.AirQualityIndexRepository
 import pk.gi.airquality.db.service.SensorDataRepository
 import pk.gi.airquality.db.service.StationRepository
 import pk.gi.airquality.mapper.ResultMapper
+import pk.gi.airquality.model.rest.out.AverageValues
 import pk.gi.airquality.model.rest.out.CityStations
 import pk.gi.airquality.model.rest.out.StationDTO
 import pk.gi.airquality.model.rest.out.VoivodeshipCity
@@ -45,21 +46,6 @@ class DataProviderService(
             throw IllegalFormulaException("Parameter formula $parameterFormula is not supported")
         }
     }
-
-    suspend fun getAverageValuesForParameterFormulaByVoivodeship(parameterFormula: String, interval: Number): List<VoivodeshipCity> {
-        if (parameterFormula in FORMULAS || parameterFormula == "all")
-            return resultMapper.mapResultListToResponseDataByVoivodeship(
-                resultMapper.mapEachTupleToDataResult(withContext(Dispatchers.IO) {
-                    sensorDataRepository.findAverageValueForParameter(interval)
-                }),
-                parameterFormula != "all",
-                parameterFormula
-            )
-        else {
-            throw IllegalFormulaException("Parameter formula $parameterFormula is not supported")
-        }
-    }
-
     suspend fun getAllIndexAfterDate(interval: Number): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
         return resultMapper.mapDbIndexToRest(withContext(Dispatchers.IO) {
             airQualityIndexRepository.findAllByStCalcDateAfter(interval)
@@ -71,6 +57,14 @@ class DataProviderService(
             stationRepository.findAllStations()
         })
     }
+
+    suspend fun getAverageValues(interval: Number): List<AverageValues> {
+        return resultMapper.mapEachTupleToAverageValues(withContext(Dispatchers.IO) {
+            sensorDataRepository.findAverageValueForParameter(interval)
+        })
+    }
+
+
 
 
     companion object {
