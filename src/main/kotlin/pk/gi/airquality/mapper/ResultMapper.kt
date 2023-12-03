@@ -171,8 +171,8 @@ class ResultMapper {
                         tuple.get(4, String::class.java),
                         tuple.get(5, String::class.java),
                         tuple.get(6, String::class.java),
-                        tuple.get(7, Double::class.java).toDouble(),
-                        tuple.get(8, Double::class.java).toDouble(),
+                        tuple.get(7, Number::class.java),
+                        tuple.get(8, Number::class.java),
                         tuple.get(9, String::class.java)
                     )
                 }

@@ -10,7 +10,7 @@ data class GraphValues(
     val stationName: String,
     val city: String,
     val voivodeship: String,
-    val longitude: Double,
-    val latitude: Double,
+    val longitude: Number,
+    val latitude: Number,
     val stationId: String
 )
