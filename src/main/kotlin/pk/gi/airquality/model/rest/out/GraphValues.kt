@@ -12,5 +12,5 @@ data class GraphValues(
     val voivodeship: String,
     val longitude: Number,
     val latitude: Number,
-    val stationId: String
+    val stationId: Number
 )

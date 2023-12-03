@@ -173,7 +173,7 @@ class ResultMapper {
                         tuple.get(6, String::class.java),
                         tuple.get(7, Number::class.java),
                         tuple.get(8, Number::class.java),
-                        tuple.get(9, String::class.java)
+                        tuple.get(9, Number::class.java)
                     )
                 }
             }
