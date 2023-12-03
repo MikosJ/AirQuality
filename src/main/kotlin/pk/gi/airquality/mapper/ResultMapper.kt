@@ -36,7 +36,7 @@ class ResultMapper {
 
     suspend fun mapEachTupleToStation(list: List<Tuple>): List<StationDTO> {
         return withContext(Dispatchers.IO) {
-            val resultList = list.map{tuple ->
+            val resultList = list.map { tuple ->
                 async {
                     StationDTO(
                         tuple.get(0, String::class.java),
@@ -152,6 +152,28 @@ class ResultMapper {
                         tuple.get(1, String::class.java),
                         tuple.get(2, String::class.java),
                         tuple.get(3, String::class.java)
+                    )
+                }
+            }
+            resultList.awaitAll()
+        }
+    }
+
+    suspend fun mapEachTupleToValues(list: List<Tuple>): List<GraphValues> {
+        return withContext(Dispatchers.IO) {
+            val resultList = list.map { tuple ->
+                async {
+                    GraphValues(
+                        tuple.get(0, Number::class.java),
+                        tuple.get(1, Timestamp::class.java).toLocalDateTime(),
+                        tuple.get(2, String::class.java),
+                        tuple.get(3, String::class.java),
+                        tuple.get(4, String::class.java),
+                        tuple.get(5, String::class.java),
+                        tuple.get(6, String::class.java),
+                        tuple.get(7, Double::class.java).toDouble(),
+                        tuple.get(8, Double::class.java).toDouble(),
+                        tuple.get(9, String::class.java)
                     )
                 }
             }

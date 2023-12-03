@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import pk.gi.airquality.Exception.IllegalFormulaException
 import pk.gi.airquality.db.model.AirQualityIndex
 import pk.gi.airquality.db.model.Station
-import pk.gi.airquality.model.rest.out.AverageValues
-import pk.gi.airquality.model.rest.out.CityStations
-import pk.gi.airquality.model.rest.out.StationDTO
-import pk.gi.airquality.model.rest.out.VoivodeshipCity
+import pk.gi.airquality.model.rest.out.*
 import pk.gi.airquality.service.DataProviderService
 
 @RestController
@@ -63,6 +60,11 @@ class ExternalDataController(
     @GetMapping("/time/{interval}/average")
     suspend fun getAverageValues(@PathVariable interval: Number):  List<AverageValues> {
         return dataProviderService.getAverageValues(interval)
+    }
+
+    @GetMapping("/stations/{stationId}/time/{interval}")
+    suspend fun getValuesForStation(@PathVariable stationId: Long, @PathVariable interval: Number): List<GraphValues> {
+        return dataProviderService.getGraphValues(stationId, interval)
     }
     companion object {
         private val logger = LogManager.getLogger()

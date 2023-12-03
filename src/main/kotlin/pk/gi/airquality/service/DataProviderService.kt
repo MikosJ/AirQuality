@@ -8,10 +8,7 @@ import pk.gi.airquality.db.service.AirQualityIndexRepository
 import pk.gi.airquality.db.service.SensorDataRepository
 import pk.gi.airquality.db.service.StationRepository
 import pk.gi.airquality.mapper.ResultMapper
-import pk.gi.airquality.model.rest.out.AverageValues
-import pk.gi.airquality.model.rest.out.CityStations
-import pk.gi.airquality.model.rest.out.StationDTO
-import pk.gi.airquality.model.rest.out.VoivodeshipCity
+import pk.gi.airquality.model.rest.out.*
 
 @Service
 class DataProviderService(
@@ -61,6 +58,12 @@ class DataProviderService(
     suspend fun getAverageValues(interval: Number): List<AverageValues> {
         return resultMapper.mapEachTupleToAverageValues(withContext(Dispatchers.IO) {
             sensorDataRepository.findAverageValueForParameter(interval)
+        })
+    }
+
+    suspend fun getGraphValues(interval: Number, stationId: Number): List<GraphValues> {
+        return resultMapper.mapEachTupleToValues(withContext(Dispatchers.IO) {
+            sensorDataRepository.findValuesForStationAndInterval(interval, stationId)
         })
     }
 
