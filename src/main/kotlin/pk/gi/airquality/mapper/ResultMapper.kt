@@ -143,11 +143,11 @@ class ResultMapper {
         }
     }
 
-    suspend fun mapEachTupleToAverageValues(list: List<Tuple>): List<AverageValues> {
+    suspend fun mapEachTupleToAverageValues(list: List<Tuple>): List<AverageValue> {
         return withContext(Dispatchers.IO) {
             val resultList = list.map { tuple ->
                 async {
-                    AverageValues(
+                    AverageValue(
                         tuple.get(0, Number::class.java),
                         tuple.get(1, String::class.java),
                         tuple.get(2, String::class.java),
@@ -159,11 +159,11 @@ class ResultMapper {
         }
     }
 
-    suspend fun mapEachTupleToValues(list: List<Tuple>): List<GraphValues> {
+    suspend fun mapEachTupleToValues(list: List<Tuple>): List<GraphValue> {
         return withContext(Dispatchers.IO) {
             val resultList = list.map { tuple ->
                 async {
-                    GraphValues(
+                    GraphValue(
                         tuple.get(0, Number::class.java),
                         tuple.get(1, Timestamp::class.java).toLocalDateTime(),
                         tuple.get(2, String::class.java),
@@ -174,6 +174,23 @@ class ResultMapper {
                         tuple.get(7, Number::class.java),
                         tuple.get(8, Number::class.java),
                         tuple.get(9, Number::class.java)
+                    )
+                }
+            }
+            resultList.awaitAll()
+        }
+    }
+
+    suspend fun mapEachTupleToAverageVoivodeshipData(list: List<Tuple>): List<GraphAverageVoivodeshipValue> {
+        return withContext(Dispatchers.IO) {
+            val resultList = list.map { tuple ->
+                async {
+                    GraphAverageVoivodeshipValue(
+                        tuple.get(0, Number::class.java),
+                        tuple.get(1, Timestamp::class.java).toLocalDateTime(),
+                        tuple.get(2, String::class.java),
+                        tuple.get(3, String::class.java),
+                        tuple.get(4, String::class.java)
                     )
                 }
             }

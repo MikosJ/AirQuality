@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import pk.gi.airquality.Exception.IllegalFormulaException
-import pk.gi.airquality.db.model.AirQualityIndex
-import pk.gi.airquality.db.model.Station
 import pk.gi.airquality.model.rest.out.*
 import pk.gi.airquality.service.DataProviderService
 
@@ -47,7 +45,7 @@ class ExternalDataController(
     }
 
     @GetMapping("/stations/index/{interval}")
-    suspend fun getAirQualityIndex(@PathVariable interval: Number): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
+    suspend fun getAirQualityIndex(@PathVariable interval: Number): List<AirQualityIndex> {
 
         return dataProviderService.getAllIndexAfterDate(interval)
     }
@@ -58,13 +56,17 @@ class ExternalDataController(
     }
 
     @GetMapping("/time/{interval}/average")
-    suspend fun getAverageValues(@PathVariable interval: Number):  List<AverageValues> {
+    suspend fun getAverageValues(@PathVariable interval: Number):  List<AverageValue> {
         return dataProviderService.getAverageValues(interval)
     }
 
     @GetMapping("/stations/{stationId}/time/{interval}")
-    suspend fun getValuesForStation(@PathVariable stationId: Long, @PathVariable interval: Number): List<GraphValues> {
+    suspend fun getValuesForStation(@PathVariable stationId: Long, @PathVariable interval: Number): List<GraphValue> {
         return dataProviderService.getGraphValues(stationId, interval)
+    }
+    @GetMapping("/stations/all/time/{interval}/average")
+    suspend fun getValuesForStation(@PathVariable interval: Number): List<GraphAverageVoivodeshipValue> {
+        return dataProviderService.getGraphAverageVoivodeshipValues(interval)
     }
     companion object {
         private val logger = LogManager.getLogger()

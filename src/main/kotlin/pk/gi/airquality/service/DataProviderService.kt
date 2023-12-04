@@ -30,7 +30,10 @@ class DataProviderService(
         }
     }
 
-    suspend fun getDataForParameterFormulaByVoivodeship(parameterFormula: String, interval: Number): List<VoivodeshipCity> {
+    suspend fun getDataForParameterFormulaByVoivodeship(
+        parameterFormula: String,
+        interval: Number
+    ): List<VoivodeshipCity> {
         if (parameterFormula in FORMULAS || parameterFormula == "all")
             return resultMapper.mapResultListToResponseDataByVoivodeship(
                 resultMapper.mapEachTupleToDataResult(withContext(Dispatchers.IO) {
@@ -43,7 +46,8 @@ class DataProviderService(
             throw IllegalFormulaException("Parameter formula $parameterFormula is not supported")
         }
     }
-    suspend fun getAllIndexAfterDate(interval: Number): List<pk.gi.airquality.model.rest.out.AirQualityIndex> {
+
+    suspend fun getAllIndexAfterDate(interval: Number): List<AirQualityIndex> {
         return resultMapper.mapDbIndexToRest(withContext(Dispatchers.IO) {
             airQualityIndexRepository.findAllByStCalcDateAfter(interval)
         })
@@ -55,19 +59,23 @@ class DataProviderService(
         })
     }
 
-    suspend fun getAverageValues(interval: Number): List<AverageValues> {
+    suspend fun getAverageValues(interval: Number): List<AverageValue> {
         return resultMapper.mapEachTupleToAverageValues(withContext(Dispatchers.IO) {
             sensorDataRepository.findAverageValueForParameter(interval)
         })
     }
 
-    suspend fun getGraphValues(interval: Number, stationId: Number): List<GraphValues> {
+    suspend fun getGraphValues(interval: Number, stationId: Number): List<GraphValue> {
         return resultMapper.mapEachTupleToValues(withContext(Dispatchers.IO) {
             sensorDataRepository.findValuesForStationAndInterval(interval, stationId)
         })
     }
 
-
+    suspend fun getGraphAverageVoivodeshipValues(interval: Number): List<GraphAverageVoivodeshipValue> {
+        return resultMapper.mapEachTupleToAverageVoivodeshipData(withContext(Dispatchers.IO) {
+            sensorDataRepository.findAverageVoivodeshipData(interval)
+        })
+    }
 
 
     companion object {
