@@ -17,7 +17,7 @@ class ExternalDataController(
     val dataProviderService: DataProviderService
 ) {
     @GetMapping("/time/{interval}/parameter/{parameterFormula}")
-    suspend fun getLastHourData(@PathVariable parameterFormula: String, @PathVariable interval: Number): ResponseEntity<List<CityStations>> {
+    suspend fun getLastIntervalData(@PathVariable parameterFormula: String, @PathVariable interval: Number): ResponseEntity<List<CityStations>> {
         runCatching {
             return ResponseEntity(dataProviderService.getDataForParameterFormula(parameterFormula, interval), HttpStatus.OK)
         }
@@ -31,7 +31,7 @@ class ExternalDataController(
     }
 
     @GetMapping("/time/{interval}/parameter/{parameterFormula}/voivodeships")
-    suspend fun getLastHourDataVoivodeships(@PathVariable parameterFormula: String, @PathVariable interval: Number): ResponseEntity<List<VoivodeshipCity>> {
+    suspend fun getLastIntervalDataVoivodeships(@PathVariable parameterFormula: String, @PathVariable interval: Number): ResponseEntity<List<VoivodeshipCity>> {
         runCatching {
             return ResponseEntity(dataProviderService.getDataForParameterFormulaByVoivodeship(parameterFormula, interval), HttpStatus.OK)
         }
@@ -46,7 +46,6 @@ class ExternalDataController(
 
     @GetMapping("/stations/index/{interval}")
     suspend fun getAirQualityIndex(@PathVariable interval: Number): List<AirQualityIndex> {
-
         return dataProviderService.getAllIndexAfterDate(interval)
     }
 
@@ -65,7 +64,7 @@ class ExternalDataController(
         return dataProviderService.getGraphValues(stationId, interval)
     }
     @GetMapping("/stations/all/time/{interval}/average")
-    suspend fun getValuesForStation(@PathVariable interval: Number): List<GraphAverageVoivodeshipValue> {
+    suspend fun getAverageValuesForStation(@PathVariable interval: Number): List<GraphAverageVoivodeshipValue> {
         return dataProviderService.getGraphAverageVoivodeshipValues(interval)
     }
     companion object {
