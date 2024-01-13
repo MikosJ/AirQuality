@@ -5,16 +5,20 @@ import io.mockk.mockk
 import jakarta.persistence.Tuple
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pk.gi.airquality.mapper.ResultMapper
+import pk.gi.airquality.model.rest.out.Parameter
 import pk.gi.airquality.model.rest.out.Result
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
+import kotlin.reflect.typeOf
 
 
 @ExperimentalCoroutinesApi
@@ -33,12 +37,12 @@ class ResultMapperTest {
     }
 
     @Test
-    fun `mapEachTupleToDataResult should map tuples to Result objects`() = runBlocking {
+    fun `mapEachTupleToDataResult should map tuples to Result objects`(): Unit = runBlocking {
         // Arrange
         val tuple1 = mockk<Tuple> {
             coEvery { get(0, BigDecimal::class.java) } returns BigDecimal.ONE
             coEvery { get(1, Timestamp::class.java) } returns Timestamp(
-                LocalDateTime.now().toEpochSecond(java.time.ZoneOffset.UTC)*1000
+                LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000
             )
             coEvery { get(2, String::class.java) } returns "PM2.5"
             coEvery { get(3, String::class.java) } returns "pył zawieszony PM2.5"
@@ -52,7 +56,7 @@ class ResultMapperTest {
         val tuple2 = mockk<Tuple> {
             coEvery { get(0, BigDecimal::class.java) } returns BigDecimal.ONE
             coEvery { get(1, Timestamp::class.java) } returns Timestamp(
-                LocalDateTime.now().toEpochSecond(java.time.ZoneOffset.UTC)*1000
+                LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000
             )
             coEvery { get(2, String::class.java) } returns "PM10"
             coEvery { get(3, String::class.java) } returns "pył zawieszony PM10"
@@ -73,6 +77,7 @@ class ResultMapperTest {
         assertEquals(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).plusHours(1), result[0].date)
         assertEquals("Kraków", result[0].city)
         assertEquals(BigDecimal.ONE, result[0].value)
+        assertThat(result[0]).isInstanceOf(Result::class.java)
     }
 
     @Test
@@ -133,6 +138,7 @@ class ResultMapperTest {
         assertEquals("pył zawieszony PM10", parameters[1].name)
         assertEquals("PM10", parameters[1].formula)
         assertEquals(1, parameters[1].values.size)
+        assertThat(parameters[0]).isInstanceOf(Parameter::class.java)
     }
 }
 
